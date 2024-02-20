@@ -544,11 +544,21 @@ kubectl create --filename externaldns-with-rbac.yaml \
 
 ## Arguments
 
-This list is not the full list, but a few arguments that where chosen.
+This is not the full list of arguments, but a few arguments specific to AWS.
+Run `external-dns --help` or `docker run --rm -i registry.k8s.io/external-dns/external-dns:v0.14.0` to see expanded list.
 
 ### aws-zone-type
 
 `aws-zone-type` allows filtering for private and public zones
+
+### aws-zone-match-parent
+`aws-zone-match-parent` allows support subdomains within the same zone by using their parent domain, i.e --domain-filter=x.example.com would create a DNS entry for x.example.com (and subdomains thereof).
+
+```yaml
+## hosted zone domain: example.com
+--domain-filter=x.example.com,example.com
+--aws-zone-match-parent
+```
 
 ## Annotations
 
@@ -561,15 +571,6 @@ Annotations which are specific to AWS.
 ### target-hosted-zone
 
 `external-dns.alpha.kubernetes.io/aws-target-hosted-zone` can optionally be set to the ID of a Route53 hosted zone. This will force external-dns to use the specified hosted zone when creating an ALIAS target.
-
-### aws-zone-match-parent
-`aws-zone-match-parent` allows support subdomains within the same zone by using their parent domain, i.e --domain-filter=x.example.com would create a DNS entry for x.example.com (and subdomains thereof).
-
-```yaml
-## hosted zone domain: example.com
---domain-filter=x.example.com,example.com
---aws-zone-match-parent
-```
 
 ## Verify ExternalDNS works (Service example)
 
